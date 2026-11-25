@@ -1089,13 +1089,6 @@
           "intelligent_schedule": "智慧排程"
         }
       },
-      "energy_monitoring_mode": {
-        "name": "能源監控",
-        "state": {
-          "semi_automated": "半自動監控",
-          "smart_meter": "智慧電表監控"
-        }
-      },
       "operating_submode": {
         "name": "運作子模式",
         "state": {

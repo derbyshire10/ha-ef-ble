@@ -3,9 +3,6 @@
     "button": {
       "power_off": {
         "default": "mdi:power"
-      },
-      "set_max_grid_export_limit": {
-        "default": "mdi:transmission-tower"
       }
     },
     "binary_sensor": {
@@ -405,13 +402,6 @@
           "power_storage": "mdi:battery-charging"
         }
       },
-      "energy_monitoring_mode": {
-        "default": "mdi:meter-electric",
-        "state": {
-          "semi_automated": "mdi:home-lightning-bolt",
-          "smart_meter": "mdi:meter-electric"
-        }
-      },
       "operating_submode": {
         "default": "mdi:tune-variant",
         "state": {
@@ -459,6 +449,9 @@
       },
       "ac_5p8_charging_power": {
         "default": "mdi:lightning-bolt"
+      },
+      "grid_feed_power_limit": {
+        "default": "mdi:transmission-tower"
       },
       "feed_grid_pow_limit": {
         "default": "mdi:transmission-tower"

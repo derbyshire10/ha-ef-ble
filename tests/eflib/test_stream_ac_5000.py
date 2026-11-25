@@ -4,7 +4,6 @@ from pytest_mock import MockerFixture
 from custom_components.ef_ble.eflib import device_class_from_sn
 from custom_components.ef_ble.eflib.devices.stream_ac_5000 import (
     Device,
-    EnergyMonitoringMode,
     OperatingMode,
 )
 from custom_components.ef_ble.eflib.entity import controls
@@ -89,6 +88,29 @@ async def test_parses_operating_mode(device, wire_mode, expected_mode):
     assert device.work_mode is expected_mode
 
 
+async def test_parses_grid_feed_power_limit_and_exposes_power_control(device):
+    message = es22_bkw_pb2.DisplayPropertyUpload(
+        power_parameter_config=es22_bkw_pb2.BkwPowerParameterConfig(
+            on_grid_feed_power_limit=1000,
+            on_grid_feed_power_max=2500,
+        )
+    )
+    packet = await device.packet_parse(_telemetry_packet(message))
+
+    assert await device.data_parse(packet)
+    assert device.grid_feed_power_limit == 1000
+    assert device.grid_feed_power_max == 2500
+
+    (control,) = device.get_controls(controls.power)
+    assert control.key == "grid_feed_power_limit"
+    assert control.max.resolve(device) == 2500
+
+
+async def test_grid_feed_power_limit_requires_reported_maximum(device):
+    with pytest.raises(ValueError, match="has not reported"):
+        await device.set_grid_feed_power_limit(1000)
+
+
 def test_exposes_supported_work_modes_as_a_select(device):
     controls_by_key = {
         control.key: control for control in device.get_controls(controls.select)
@@ -99,57 +121,6 @@ def test_exposes_supported_work_modes_as_a_select(device):
         "intelligent",
         "scheduled",
     ]
-
-
-@pytest.mark.parametrize(
-    ("wire_mode", "expected_mode"),
-    [
-        (1, EnergyMonitoringMode.SEMI_AUTOMATED),
-        (2, EnergyMonitoringMode.SMART_METER),
-    ],
-)
-async def test_parses_energy_monitoring_mode(device, wire_mode, expected_mode):
-    message = es22_bkw_pb2.DisplayPropertyUpload(pow_consumption_measurement=wire_mode)
-    packet = await device.packet_parse(_telemetry_packet(message))
-
-    assert await device.data_parse(packet)
-    assert device.energy_monitoring_mode is expected_mode
-
-
-def test_exposes_energy_monitoring_mode_as_a_select(device):
-    controls_by_key = {
-        control.key: control for control in device.get_controls(controls.select)
-    }
-
-    assert controls_by_key["energy_monitoring_mode"].options_str == [
-        "semi_automated",
-        "smart_meter",
-    ]
-
-
-async def test_parses_grid_feed_power_max_and_registers_export_button(device):
-    message = es22_bkw_pb2.DisplayPropertyUpload(
-        power_parameter_config=es22_bkw_pb2.BkwPowerParameterConfig(
-            on_grid_feed_power_max=2500,
-            feed_to_grid_limit_on_off=False,
-        )
-    )
-    packet = await device.packet_parse(_telemetry_packet(message))
-    assert await device.data_parse(packet)
-
-    (control,) = device.get_controls(controls.button)
-    assert control.key == "set_max_grid_export_limit"
-    assert device.grid_feed_power_max == 2500
-    assert any(
-        control.key == "feed_in_limit"
-        for control in device.get_controls(controls.switch)
-    )
-    assert device.feed_in_limit is False
-
-
-async def test_max_grid_export_button_requires_reported_limit(device):
-    with pytest.raises(ValueError, match="has not reported"):
-        await device.set_max_grid_export_limit()
 
 
 async def test_parses_unobfuscated_serial_routed_v4_telemetry(device):

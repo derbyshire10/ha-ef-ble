@@ -1,4 +1,3 @@
-import time
 from collections.abc import Sequence
 from typing import ClassVar
 
@@ -32,13 +31,6 @@ class OperatingMode(IntFieldValue):
     SELF_POWERED = 0
     INTELLIGENT = 1
     SCHEDULED = 2
-
-
-class EnergyMonitoringMode(IntFieldValue):
-    UNKNOWN = -1
-
-    SEMI_AUTOMATED = 1
-    SMART_METER = 2
 
 
 class BatteryPower(
@@ -108,7 +100,6 @@ class Device(DeviceBase, ProtobufProps):
     _TELEMETRY_CMD_ID: ClassVar[int] = 0x27
     _WRITE_CMD_SET: ClassVar[int] = 0xFE
     _WRITE_CMD_ID: ClassVar[int] = 0x26
-    _CONFIG_WRITE_CMD_ID: ClassVar[int] = 0x11
     _ACTION_CMD_ID: ClassVar[int] = 0x25
     _SYSTEM_MODULE: ClassVar[int] = 0x02
     _ACTION_FULL_UPLOAD: ClassVar[int] = 88
@@ -125,10 +116,8 @@ class Device(DeviceBase, ProtobufProps):
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
     work_mode = pb_field(pb.work_mode, OperatingMode.from_value)
+    grid_feed_power_limit = pb_field(pb.power_parameter_config.on_grid_feed_power_limit)
     grid_feed_power_max = pb_field(pb.power_parameter_config.on_grid_feed_power_max)
-    energy_monitoring_mode = pb_field(
-        pb.pow_consumption_measurement, EnergyMonitoringMode.from_value
-    )
 
     battery_power = BatteryPower()
     grid_power = GridPower()
@@ -281,31 +270,17 @@ class Device(DeviceBase, ProtobufProps):
             )
         )
 
-    @controls.select(energy_monitoring_mode, options=EnergyMonitoringMode)
-    async def set_energy_monitoring_mode(self, mode: EnergyMonitoringMode):
-        if mode is EnergyMonitoringMode.UNKNOWN:
-            raise ValueError("Unknown STREAM AC 5000 energy monitoring mode")
-
-        message = es22_bkw_pb2.ConfigWrite(
-            cfg_utc_time=round(time.time()),
-            cfg_pow_consumption_measurement=mode.value,
-        )
-        packet = self._routing.write_packet(
-            message.SerializeToString(), cmd_id=self._CONFIG_WRITE_CMD_ID
-        )
-        await self.send_packet(packet, raise_on_failure=True)
-
-    @controls.button()
-    async def set_max_grid_export_limit(self) -> None:
-        maximum = self.grid_feed_power_max
-        if maximum is None or maximum <= 0:
+    @controls.power(
+        grid_feed_power_limit,
+        max=dynamic(grid_feed_power_max),
+    )
+    async def set_grid_feed_power_limit(self, value: float) -> bool:
+        if self.grid_feed_power_max is None:
             raise ValueError(
-                "STREAM AC 5000 has not reported an available grid-feed limit"
+                "STREAM AC 5000 has not reported its maximum grid-feed power"
             )
 
         await self._write_property(
-            es22_bkw_pb2.BkwPowerParameterConfig(
-                on_grid_feed_power_limit=maximum,
-                feed_to_grid_limit_on_off=True,
-            )
+            es22_bkw_pb2.BkwPowerParameterConfig(on_grid_feed_power_limit=int(value))
         )
+        return True

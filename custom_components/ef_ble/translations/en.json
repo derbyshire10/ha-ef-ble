@@ -342,9 +342,6 @@
       "power_off": {
         "name": "Power Off"
       },
-      "set_max_grid_export_limit": {
-        "name": "Enable Maximum Grid Export"
-      },
       "unpause_solar": {
         "name": "Unpause Solar"
       }
@@ -1100,13 +1097,6 @@
           "intelligent_schedule": "Intelligent Schedule"
         }
       },
-      "energy_monitoring_mode": {
-        "name": "Energy Monitoring",
-        "state": {
-          "semi_automated": "Semi-Automated Monitoring",
-          "smart_meter": "Smart Meter Monitoring"
-        }
-      },
       "operating_submode": {
         "name": "Operating Submode",
         "state": {
@@ -1146,6 +1136,9 @@
       },
       "ac_c20_charging_power": {
         "name": "AC C20 Charging Power"
+      },
+      "grid_feed_power_limit": {
+        "name": "Grid Feed Power Limit"
       },
       "feed_grid_pow_limit": {
         "name": "Feed Grid Power Limit"
