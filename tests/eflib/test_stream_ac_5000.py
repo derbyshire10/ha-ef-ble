@@ -5,7 +5,7 @@ from custom_components.ef_ble.eflib import device_class_from_sn
 from custom_components.ef_ble.eflib.devices.stream_ac_5000 import Device
 from custom_components.ef_ble.eflib.packet import Packet, PacketV4
 from custom_components.ef_ble.eflib.pb import es22_bkw_pb2
-from custom_components.ef_ble.eflib.serial_routing import RoutingEnvelope
+from custom_components.ef_ble.eflib.serial_routing import RoutingEnvelope, SerialRouting
 
 
 @pytest.fixture
@@ -99,3 +99,36 @@ async def test_parses_unobfuscated_serial_routed_v4_telemetry(device):
     assert await device.data_parse(packet)
     assert device.battery_level == 56
     assert device.battery_power == pytest.approx(-311.43)
+
+
+def test_ac_port_control_uses_module_addressed_source(device):
+    routing = SerialRouting(
+        device.serial_number,
+        cmd_set=0xFE,
+        cmd_id=0x26,
+        dst=0x02,
+        fallback_dst=0x02,
+        sequenced_writes=True,
+    )
+    envelope = RoutingEnvelope(
+        flags=0x2E,
+        cmd_set=0xFE,
+        cmd_id=0x27,
+        seq=0x20,
+        src=0x02,
+        dst=0x21,
+    )
+    post = PacketV4(
+        src=0x02,
+        dst=0x21,
+        cmd_set=0xFE,
+        cmd_id=0x27,
+        payload=device.serial_number[-9:].encode("ascii") + envelope.to_bytes(),
+        sentinel=True,
+    )
+    routing.remember_post(post)
+
+    packet = routing.write_packet(b"ac-port-setting")
+
+    assert isinstance(packet, PacketV4)
+    assert packet.cmd_flags == 0x10

@@ -42,16 +42,12 @@ class SystemBatteryLevel(
 
 
 class BatteryLevel(repeated_pb_field_type(pb.battery_info_report.battery_info_item)):
-    def get_item(
-        self, value: Sequence[es22_bkw_pb2.BatteryInfoItem]
-    ) -> int | None:
+    def get_item(self, value: Sequence[es22_bkw_pb2.BatteryInfoItem]) -> int | None:
         return value[0].soc if value else None
 
 
 class CellTemperature(repeated_pb_field_type(pb.battery_info_report.battery_info_item)):
-    def get_item(
-        self, value: Sequence[es22_bkw_pb2.BatteryInfoItem]
-    ) -> int | None:
+    def get_item(self, value: Sequence[es22_bkw_pb2.BatteryInfoItem]) -> int | None:
         return max((item.cell_max_temp for item in value), default=None)
 
 
@@ -88,9 +84,7 @@ class Device(DeviceBase, ProtobufProps):
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
 
-    battery_charge_limit_min = pb_field(
-        pb.bp_soc_config.discharge_soc_lower_limit
-    )
+    battery_charge_limit_min = pb_field(pb.bp_soc_config.discharge_soc_lower_limit)
     battery_charge_limit_max = pb_field(pb.bp_soc_config.charge_soc_upper_limit)
     energy_backup = pb_field(pb.bp_backup_config.backup_soc_on_off)
     energy_backup_battery_level = pb_field(pb.bp_backup_config.backup_soc)
@@ -212,9 +206,7 @@ class Device(DeviceBase, ProtobufProps):
         max=dynamic(battery_charge_limit_max),
     )
     async def set_energy_backup_battery_level(self, value: float):
-        await self._write_property(
-            es22_bkw_pb2.BpBackupConfig(backup_soc=int(value))
-        )
+        await self._write_property(es22_bkw_pb2.BpBackupConfig(backup_soc=int(value)))
         return True
 
     @controls.switch(energy_backup)

@@ -56,7 +56,7 @@ class SerialRouting:
         dst: int,
         fallback_dst: int,
         src: int = 0x21,
-        cmd_flags: int = 0x11,
+        cmd_flags: int = 0x10,
         sequenced_writes: bool = False,
     ) -> None:
         self._serial = serial
@@ -116,20 +116,17 @@ class SerialRouting:
                 0x13,
             )
 
-        envelope = (
-            self._WRITE_ENVELOPE_PREFIX
-            + bytes(
-                [
-                    self._envelope_flags(),
-                    self._cmd_set,
-                    cmd_id,
-                    self._next_seq(),
-                    self._src,
-                    0x01,
-                    self._dst,
-                    0x01,
-                ]
-            )
+        envelope = self._WRITE_ENVELOPE_PREFIX + bytes(
+            [
+                self._envelope_flags(),
+                self._cmd_set,
+                cmd_id,
+                self._next_seq(),
+                self._src,
+                0x01,
+                self._dst,
+                0x01,
+            ]
         )
         serial9 = self._serial[-self.SERIAL_FRAGMENT_LEN :].encode("ascii")
         return dataclasses.replace(
