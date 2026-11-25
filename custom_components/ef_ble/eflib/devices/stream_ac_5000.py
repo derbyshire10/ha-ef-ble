@@ -33,6 +33,13 @@ class OperatingMode(IntFieldValue):
     SCHEDULED = 2
 
 
+class EnergyMonitoringMode(IntFieldValue):
+    UNKNOWN = -1
+
+    SEMI_AUTOMATED = 1
+    SMART_METER = 2
+
+
 class BatteryPower(
     repeated_pb_field_type(pb.system_sub_dev_energy_flow_detail.dev_energy_flow_detail)
 ):
@@ -117,6 +124,9 @@ class Device(DeviceBase, ProtobufProps):
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
     work_mode = pb_field(pb.work_mode, OperatingMode.from_value)
     grid_feed_power_max = pb_field(pb.power_parameter_config.on_grid_feed_power_max)
+    energy_monitoring_mode = pb_field(
+        pb.pow_consumption_measurement, EnergyMonitoringMode.from_value
+    )
 
     battery_power = BatteryPower()
     grid_power = GridPower()
@@ -266,6 +276,21 @@ class Device(DeviceBase, ProtobufProps):
             es22_bkw_pb2.PropertyCmd(
                 action_id=work_mode_field.number,
                 work_mode=mode.value,
+            )
+        )
+
+    @controls.select(energy_monitoring_mode, options=EnergyMonitoringMode)
+    async def set_energy_monitoring_mode(self, mode: EnergyMonitoringMode):
+        if mode is EnergyMonitoringMode.UNKNOWN:
+            raise ValueError("Unknown STREAM AC 5000 energy monitoring mode")
+
+        mode_field = es22_bkw_pb2.PropertyCmd.DESCRIPTOR.fields_by_name[
+            "pow_consumption_measurement"
+        ]
+        await self._send_property_cmd(
+            es22_bkw_pb2.PropertyCmd(
+                action_id=mode_field.number,
+                pow_consumption_measurement=mode.value,
             )
         )
 

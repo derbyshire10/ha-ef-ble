@@ -10,8 +10,8 @@ enum WorkMode {
   EMERGENCY_STOP = 4;
 }
 
-// STREAM AC 5000 BLE properties. Field numbers are retained from captured ES22
-// telemetry and app configuration messages.
+// STREAM AC 5000 BLE properties. The power-consumption measurement fields are an
+// experimental candidate copied from the STREAM AC protocol for hardware testing.
 message DisplayPropertyUpload {
   optional BkwPowerParameterConfig power_parameter_config = 10;
   optional EnergyStreamReport sys_energy_stream_report = 11;
@@ -24,6 +24,7 @@ message DisplayPropertyUpload {
   optional SysBatteryInfoReport sys_battery_info_report = 44;
   optional SystemSubDevEnergyFlowDetail system_sub_dev_energy_flow_detail = 50;
   optional SystemSubDevBatteryReport system_sub_dev_battery_report = 54;
+  optional uint32 pow_consumption_measurement = 760;
 }
 
 message EnergyStreamReport {
@@ -108,6 +109,7 @@ message PropertyCmd {
   optional WorkMode work_mode = 25;
   optional BpSocConfig bp_soc_config = 29;
   optional BpBackupConfig bp_backup_config = 30;
+  optional uint32 pow_consumption_measurement = 239;
 }
 
 message ActionCmd {
