@@ -109,7 +109,11 @@ message PropertyCmd {
   optional WorkMode work_mode = 25;
   optional BpSocConfig bp_soc_config = 29;
   optional BpBackupConfig bp_backup_config = 30;
-  optional uint32 pow_consumption_measurement = 239;
+}
+
+message ConfigWrite {
+  optional uint32 cfg_utc_time = 6;
+  optional uint32 cfg_pow_consumption_measurement = 239;
 }
 
 message ActionCmd {
