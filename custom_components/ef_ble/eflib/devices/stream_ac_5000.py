@@ -12,24 +12,48 @@ from ..packet import Packet, PacketV4
 from ..pb import es22_bkw_pb2
 from ..props import (
     ProtobufProps,
-    computed_field,
     pb_field,
     proto_attr_mapper,
+    proto_has_attr,
     repeated_pb_field_type,
 )
 from ..props.transforms import out_power, pround
 from ..serial_routing import SerialRouting
 
 pb = proto_attr_mapper(es22_bkw_pb2.DisplayPropertyUpload)
+pb_flow = proto_attr_mapper(es22_bkw_pb2.DevEnergyFlowDetail)
 
 
-class EnergyFlow(
+class BatteryPower(
     repeated_pb_field_type(pb.system_sub_dev_energy_flow_detail.dev_energy_flow_detail)
 ):
     def get_item(
         self, value: Sequence[es22_bkw_pb2.DevEnergyFlowDetail]
-    ) -> es22_bkw_pb2.DevEnergyFlowDetail | None:
-        return value[0] if value else None
+    ) -> float | None:
+        return next(
+            (
+                out_power(item.inv_pwr)
+                for item in value
+                if proto_has_attr(item, pb_flow.inv_pwr)
+            ),
+            None,
+        )
+
+
+class GridPower(
+    repeated_pb_field_type(pb.system_sub_dev_energy_flow_detail.dev_energy_flow_detail)
+):
+    def get_item(
+        self, value: Sequence[es22_bkw_pb2.DevEnergyFlowDetail]
+    ) -> float | None:
+        return next(
+            (
+                pround(2)(item.on_grid_pwr)
+                for item in value
+                if proto_has_attr(item, pb_flow.on_grid_pwr)
+            ),
+            None,
+        )
 
 
 class SystemBatteryLevel(
@@ -74,7 +98,6 @@ class Device(DeviceBase, ProtobufProps):
     battery_level = SystemBatteryLevel()
     battery_level_main = BatteryLevel()
     cell_temperature = CellTemperature()
-    _energy_flow = EnergyFlow()
 
     load_system = pb_field(pb.sys_energy_stream_report.load_pwr)
     remaining_time_charging = pb_field(pb.sys_battery_info_report.charge_remain_time)
@@ -83,6 +106,9 @@ class Device(DeviceBase, ProtobufProps):
     )
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
+
+    battery_power = BatteryPower()
+    grid_power = GridPower()
 
     battery_charge_limit_min = pb_field(pb.bp_soc_config.discharge_soc_lower_limit)
     battery_charge_limit_max = pb_field(pb.bp_soc_config.charge_soc_upper_limit)
@@ -107,18 +133,6 @@ class Device(DeviceBase, ProtobufProps):
     @classmethod
     def check(cls, sn: bytes) -> bool:
         return sn[:4] in cls.SN_PREFIX
-
-    @computed_field
-    def battery_power(self) -> float | None:
-        if self._energy_flow is None:
-            return None
-        return out_power(self._energy_flow.inv_pwr)
-
-    @computed_field
-    def grid_power(self) -> float | None:
-        if self._energy_flow is None:
-            return None
-        return pround(2)(self._energy_flow.on_grid_pwr)
 
     async def packet_parse(self, data: bytes):
         return Packet.from_bytes(data, xor_payload=True)

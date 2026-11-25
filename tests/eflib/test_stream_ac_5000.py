@@ -30,6 +30,7 @@ def _telemetry_packet(message: es22_bkw_pb2.DisplayPropertyUpload) -> bytes:
 
 def _telemetry_message() -> es22_bkw_pb2.DisplayPropertyUpload:
     message = es22_bkw_pb2.DisplayPropertyUpload()
+    message.system_sub_dev_energy_flow_detail.dev_energy_flow_detail.add()
     message.system_sub_dev_energy_flow_detail.dev_energy_flow_detail.add(
         inv_pwr=311.43,
         bp_pwr=-300.32,
