@@ -12,7 +12,6 @@ from ..packet import Packet, PacketV4
 from ..pb import es22_bkw_pb2
 from ..props import (
     ProtobufProps,
-    computed_field,
     pb_field,
     proto_attr_mapper,
     proto_has_attr,
@@ -104,7 +103,6 @@ class Device(DeviceBase, ProtobufProps):
     _ACTION_CMD_ID: ClassVar[int] = 0x25
     _SYSTEM_MODULE: ClassVar[int] = 0x02
     _ACTION_FULL_UPLOAD: ClassVar[int] = 88
-    _NOMINAL_BATTERY_CAPACITY_WH: ClassVar[int] = 5_000
 
     battery_level = SystemBatteryLevel()
     battery_level_main = BatteryLevel()
@@ -130,14 +128,6 @@ class Device(DeviceBase, ProtobufProps):
     energy_backup_battery_level = pb_field(pb.bp_backup_config.backup_soc)
     feed_in_limit = pb_field(pb.power_parameter_config.feed_to_grid_limit_on_off)
     ac_ports = pb_field(pb.dev_switch.ac_socket_onoff)
-
-    @computed_field
-    def usable_battery_energy(self) -> float | None:
-        if self.battery_level is None or self.battery_charge_limit_min is None:
-            return None
-
-        usable_level = max(0, self.battery_level - self.battery_charge_limit_min)
-        return self._NOMINAL_BATTERY_CAPACITY_WH * usable_level / 100
 
     def __init__(
         self, ble_dev: BLEDevice, adv_data: AdvertisementData, sn: str

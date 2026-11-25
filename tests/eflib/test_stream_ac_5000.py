@@ -70,25 +70,6 @@ async def test_parses_stream_ac_5000_telemetry(device):
     assert device.load_from_grid == 10
     assert device.remaining_time_charging == 17
     assert device.remaining_time_discharging == 83
-    assert device.usable_battery_energy is None
-
-
-@pytest.mark.parametrize(
-    ("battery_level", "discharge_limit", "expected_energy"),
-    [(56, 20, 1800), (10, 20, 0)],
-)
-async def test_calculates_usable_battery_energy(
-    device, battery_level, discharge_limit, expected_energy
-):
-    message = _telemetry_message()
-    message.system_sub_dev_battery_report.system_sub_dev_battery_info[
-        0
-    ].soc = battery_level
-    message.bp_soc_config.discharge_soc_lower_limit = discharge_limit
-    packet = await device.packet_parse(_telemetry_packet(message))
-
-    assert await device.data_parse(packet)
-    assert device.usable_battery_energy == expected_energy
 
 
 @pytest.mark.parametrize(
