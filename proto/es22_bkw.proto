@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+package es22_bkw;
+
+// STREAM AC 5000 BLE properties. Field numbers are retained from captured ES22
+// telemetry and app configuration messages.
+message DisplayPropertyUpload {
+  optional EnergyStreamReport sys_energy_stream_report = 11;
+  optional EnergyFlowFromToDetail energy_flow_from_to_detail = 12;
+  optional DevSwitch dev_switch = 19;
+  optional BpSocConfig bp_soc_config = 29;
+  optional BpBackupConfig bp_backup_config = 30;
+  optional BatteryInfoReport battery_info_report = 38;
+  optional SysBatteryInfoReport sys_battery_info_report = 44;
+  optional SystemSubDevEnergyFlowDetail system_sub_dev_energy_flow_detail = 50;
+  optional SystemSubDevBatteryReport system_sub_dev_battery_report = 54;
+}
+
+message EnergyStreamReport {
+  optional sint32 load_pwr = 1;
+  optional sint32 grid_pwr = 2;
+  optional sint32 pv_pwr = 3;
+  optional sint32 bp_pwr = 4;
+  optional uint32 bp_soc = 5;
+  optional sint32 on_grid_pwr = 6;
+  optional sint32 backup_pwr = 7;
+}
+
+message EnergyFlowFromToDetail {
+  optional uint32 bp_to_load = 4;
+  optional uint32 grid_to_load = 6;
+  optional uint32 grid_to_backup = 18;
+  optional uint32 bp_to_backup = 19;
+}
+
+message DevSwitch {
+  optional bool ac_socket_onoff = 1;
+}
+
+message BpSocConfig {
+  optional uint32 charge_soc_upper_limit = 1;
+  optional uint32 discharge_soc_lower_limit = 2;
+}
+
+message BpBackupConfig {
+  optional bool backup_soc_on_off = 1;
+  optional uint32 backup_soc = 2;
+}
+
+message BatteryInfoReport {
+  repeated BatteryInfoItem battery_info_item = 1;
+}
+
+message BatteryInfoItem {
+  optional uint32 soc = 1;
+  optional uint32 cell_max_temp = 12;
+}
+
+message SysBatteryInfoReport {
+  optional uint32 discharge_remain_time = 6;
+  optional uint32 charge_remain_time = 7;
+}
+
+message SystemSubDevEnergyFlowDetail {
+  repeated DevEnergyFlowDetail dev_energy_flow_detail = 1;
+}
+
+message DevEnergyFlowDetail {
+  optional string dev_sn = 1;
+  optional float bp_pwr = 4;
+  optional float inv_pwr = 6;
+  optional float on_grid_pwr = 7;
+  optional float backup_pwr = 8;
+}
+
+message SystemSubDevBatteryReport {
+  repeated SystemSubDevBatteryInfo system_sub_dev_battery_info = 1;
+}
+
+message SystemSubDevBatteryInfo {
+  optional string sn = 1;
+  optional uint32 soc = 2;
+}
+
+message PropertyCmd {
+  optional uint32 action_id = 1;
+  optional DevSwitch dev_switch = 19;
+  optional BpSocConfig bp_soc_config = 29;
+  optional BpBackupConfig bp_backup_config = 30;
+}
+
+message ActionCmd {
+  optional uint32 action_id = 1;
+  optional bool active_display_property_full_upload = 23;
+}

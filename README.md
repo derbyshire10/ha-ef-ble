@@ -431,7 +431,7 @@ Click on any device below to see available sensors, switches, and controls:
 </details>
 
 <details>
-<summary><b>STREAM</b> <i>(AC, AC Pro, Max, Pro, Ultra, Ultra X)</i></summary>
+<summary><b>STREAM</b> <i>(AC, AC Pro, AC 5000, Max, Pro, Ultra, Ultra X)</i></summary>
 
 <br>
 
@@ -443,6 +443,7 @@ Click on any device below to see available sensors, switches, and controls:
 | Grid Power                          | Charging Task ²    | Discharge Limit           |                 |
 | Grid Voltage                        | Discharging Task ³ | Base Load Power ¹         |                 |
 | Grid Frequency                      |                    | Grid Input Power Limit    |                 |
+| Load System ⁵                       | AC Ports ⁵         |                           |                 |
 | Load from Battery                   |                    | Charging Power Limit ²    |                 |
 | Load from Grid                      |                    | Charging Target SOC ²     |                 |
 | Load from PV ᴹᴾᵁ                    |                    | Discharging Power Limit ³ |                 |
@@ -463,7 +464,8 @@ Click on any device below to see available sensors, switches, and controls:
 <sup>ᵁ Only available on Ultra and Ultra X variants</sup><br>
 <sup>¹ Not available when there's no base load timeframe or more than 1 timeframe configured</sup><br>
 <sup>² Only available when a charging timer task is configured</sup><br>
-<sup>³ Only available when a discharging timer task is configured</sup>
+<sup>³ Only available when a discharging timer task is configured</sup><br>
+<sup>⁵ Only available on the STREAM AC 5000</sup>
 
 </details>
 
