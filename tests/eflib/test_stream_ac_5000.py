@@ -91,6 +91,25 @@ def test_exposes_supported_work_modes_as_a_select(device):
     assert control.options_str == ["self_powered", "intelligent", "scheduled"]
 
 
+async def test_parses_grid_feed_power_max_and_registers_export_button(device):
+    message = es22_bkw_pb2.DisplayPropertyUpload(
+        bkw_power_parameter_config=es22_bkw_pb2.BkwPowerParameterConfig(
+            on_grid_feed_power_max=2500
+        )
+    )
+    packet = await device.packet_parse(_telemetry_packet(message))
+    assert await device.data_parse(packet)
+
+    (control,) = device.get_controls(controls.button)
+    assert control.key == "set_max_grid_export_limit"
+    assert device.grid_feed_power_max == 2500
+
+
+async def test_max_grid_export_button_requires_reported_limit(device):
+    with pytest.raises(ValueError, match="has not reported"):
+        await device.set_max_grid_export_limit()
+
+
 async def test_parses_unobfuscated_serial_routed_v4_telemetry(device):
     serial = device.serial_number
     envelope = RoutingEnvelope(

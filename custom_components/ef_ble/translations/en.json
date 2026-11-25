@@ -342,6 +342,9 @@
       "power_off": {
         "name": "Power Off"
       },
+      "set_max_grid_export_limit": {
+        "name": "Set Maximum Grid Export Limit"
+      },
       "unpause_solar": {
         "name": "Unpause Solar"
       }

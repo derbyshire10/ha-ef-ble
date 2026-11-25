@@ -116,6 +116,7 @@ class Device(DeviceBase, ProtobufProps):
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
     work_mode = pb_field(pb.work_mode, OperatingMode.from_value)
+    grid_feed_power_max = pb_field(pb.bkw_power_parameter_config.on_grid_feed_power_max)
 
     battery_power = BatteryPower()
     grid_power = GridPower()
@@ -259,4 +260,16 @@ class Device(DeviceBase, ProtobufProps):
                 action_id=work_mode_field.number,
                 work_mode=mode.value,
             )
+        )
+
+    @controls.button()
+    async def set_max_grid_export_limit(self) -> None:
+        maximum = self.grid_feed_power_max
+        if maximum is None or maximum <= 0:
+            raise ValueError(
+                "STREAM AC 5000 has not reported an available grid-feed limit"
+            )
+
+        await self._write_property(
+            es22_bkw_pb2.BkwPowerParameterConfig(on_grid_feed_power_limit=maximum)
         )

@@ -3,6 +3,9 @@
     "button": {
       "power_off": {
         "default": "mdi:power"
+      },
+      "set_max_grid_export_limit": {
+        "default": "mdi:transmission-tower"
       }
     },
     "binary_sensor": {
