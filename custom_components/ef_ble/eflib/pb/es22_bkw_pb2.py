@@ -24,41 +24,43 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0e\x65s22_bkw.proto\x12\x08\x65s22_bkw\"\xc2\x04\n\x15\x44isplayPropertyUpload\x12>\n\x18sys_energy_stream_report\x18\x0b \x01(\x0b\x32\x1c.es22_bkw.EnergyStreamReport\x12\x44\n\x1a\x65nergy_flow_from_to_detail\x18\x0c \x01(\x0b\x32 .es22_bkw.EnergyFlowFromToDetail\x12\'\n\ndev_switch\x18\x13 \x01(\x0b\x32\x13.es22_bkw.DevSwitch\x12,\n\rbp_soc_config\x18\x1d \x01(\x0b\x32\x15.es22_bkw.BpSocConfig\x12\x32\n\x10\x62p_backup_config\x18\x1e \x01(\x0b\x32\x18.es22_bkw.BpBackupConfig\x12\x38\n\x13\x62\x61ttery_info_report\x18& \x01(\x0b\x32\x1b.es22_bkw.BatteryInfoReport\x12?\n\x17sys_battery_info_report\x18, \x01(\x0b\x32\x1e.es22_bkw.SysBatteryInfoReport\x12Q\n!system_sub_dev_energy_flow_detail\x18\x32 \x01(\x0b\x32&.es22_bkw.SystemSubDevEnergyFlowDetail\x12J\n\x1dsystem_sub_dev_battery_report\x18\x36 \x01(\x0b\x32#.es22_bkw.SystemSubDevBatteryReport\"\x91\x01\n\x12\x45nergyStreamReport\x12\x10\n\x08load_pwr\x18\x01 \x01(\x11\x12\x10\n\x08grid_pwr\x18\x02 \x01(\x11\x12\x0e\n\x06pv_pwr\x18\x03 \x01(\x11\x12\x0e\n\x06\x62p_pwr\x18\x04 \x01(\x11\x12\x0e\n\x06\x62p_soc\x18\x05 \x01(\r\x12\x13\n\x0bon_grid_pwr\x18\x06 \x01(\x11\x12\x12\n\nbackup_pwr\x18\x07 \x01(\x11\"p\n\x16\x45nergyFlowFromToDetail\x12\x12\n\nbp_to_load\x18\x04 \x01(\r\x12\x14\n\x0cgrid_to_load\x18\x06 \x01(\r\x12\x16\n\x0egrid_to_backup\x18\x12 \x01(\r\x12\x14\n\x0c\x62p_to_backup\x18\x13 \x01(\r\"$\n\tDevSwitch\x12\x17\n\x0f\x61\x63_socket_onoff\x18\x01 \x01(\x08\"P\n\x0b\x42pSocConfig\x12\x1e\n\x16\x63harge_soc_upper_limit\x18\x01 \x01(\r\x12!\n\x19\x64ischarge_soc_lower_limit\x18\x02 \x01(\r\"?\n\x0e\x42pBackupConfig\x12\x19\n\x11\x62\x61\x63kup_soc_on_off\x18\x01 \x01(\x08\x12\x12\n\nbackup_soc\x18\x02 \x01(\r\"I\n\x11\x42\x61tteryInfoReport\x12\x34\n\x11\x62\x61ttery_info_item\x18\x01 \x03(\x0b\x32\x19.es22_bkw.BatteryInfoItem\"5\n\x0f\x42\x61tteryInfoItem\x12\x0b\n\x03soc\x18\x01 \x01(\r\x12\x15\n\rcell_max_temp\x18\x0c \x01(\r\"Q\n\x14SysBatteryInfoReport\x12\x1d\n\x15\x64ischarge_remain_time\x18\x06 \x01(\r\x12\x1a\n\x12\x63harge_remain_time\x18\x07 \x01(\r\"]\n\x1cSystemSubDevEnergyFlowDetail\x12=\n\x16\x64\x65v_energy_flow_detail\x18\x01 \x03(\x0b\x32\x1d.es22_bkw.DevEnergyFlowDetail\"o\n\x13\x44\x65vEnergyFlowDetail\x12\x0e\n\x06\x64\x65v_sn\x18\x01 \x01(\t\x12\x0e\n\x06\x62p_pwr\x18\x04 \x01(\x02\x12\x0f\n\x07inv_pwr\x18\x06 \x01(\x02\x12\x13\n\x0bon_grid_pwr\x18\x07 \x01(\x02\x12\x12\n\nbackup_pwr\x18\x08 \x01(\x02\"c\n\x19SystemSubDevBatteryReport\x12\x46\n\x1bsystem_sub_dev_battery_info\x18\x01 \x03(\x0b\x32!.es22_bkw.SystemSubDevBatteryInfo\"2\n\x17SystemSubDevBatteryInfo\x12\n\n\x02sn\x18\x01 \x01(\t\x12\x0b\n\x03soc\x18\x02 \x01(\r\"\xab\x01\n\x0bPropertyCmd\x12\x11\n\taction_id\x18\x01 \x01(\r\x12\'\n\ndev_switch\x18\x13 \x01(\x0b\x32\x13.es22_bkw.DevSwitch\x12,\n\rbp_soc_config\x18\x1d \x01(\x0b\x32\x15.es22_bkw.BpSocConfig\x12\x32\n\x10\x62p_backup_config\x18\x1e \x01(\x0b\x32\x18.es22_bkw.BpBackupConfig\"K\n\tActionCmd\x12\x11\n\taction_id\x18\x01 \x01(\r\x12+\n#active_display_property_full_upload\x18\x17 \x01(\x08')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0e\x65s22_bkw.proto\x12\x08\x65s22_bkw\"\xe9\x04\n\x15\x44isplayPropertyUpload\x12>\n\x18sys_energy_stream_report\x18\x0b \x01(\x0b\x32\x1c.es22_bkw.EnergyStreamReport\x12\x44\n\x1a\x65nergy_flow_from_to_detail\x18\x0c \x01(\x0b\x32 .es22_bkw.EnergyFlowFromToDetail\x12\'\n\ndev_switch\x18\x13 \x01(\x0b\x32\x13.es22_bkw.DevSwitch\x12%\n\twork_mode\x18\x19 \x01(\x0e\x32\x12.es22_bkw.WorkMode\x12,\n\rbp_soc_config\x18\x1d \x01(\x0b\x32\x15.es22_bkw.BpSocConfig\x12\x32\n\x10\x62p_backup_config\x18\x1e \x01(\x0b\x32\x18.es22_bkw.BpBackupConfig\x12\x38\n\x13\x62\x61ttery_info_report\x18& \x01(\x0b\x32\x1b.es22_bkw.BatteryInfoReport\x12?\n\x17sys_battery_info_report\x18, \x01(\x0b\x32\x1e.es22_bkw.SysBatteryInfoReport\x12Q\n!system_sub_dev_energy_flow_detail\x18\x32 \x01(\x0b\x32&.es22_bkw.SystemSubDevEnergyFlowDetail\x12J\n\x1dsystem_sub_dev_battery_report\x18\x36 \x01(\x0b\x32#.es22_bkw.SystemSubDevBatteryReport\"\x91\x01\n\x12\x45nergyStreamReport\x12\x10\n\x08load_pwr\x18\x01 \x01(\x11\x12\x10\n\x08grid_pwr\x18\x02 \x01(\x11\x12\x0e\n\x06pv_pwr\x18\x03 \x01(\x11\x12\x0e\n\x06\x62p_pwr\x18\x04 \x01(\x11\x12\x0e\n\x06\x62p_soc\x18\x05 \x01(\r\x12\x13\n\x0bon_grid_pwr\x18\x06 \x01(\x11\x12\x12\n\nbackup_pwr\x18\x07 \x01(\x11\"p\n\x16\x45nergyFlowFromToDetail\x12\x12\n\nbp_to_load\x18\x04 \x01(\r\x12\x14\n\x0cgrid_to_load\x18\x06 \x01(\r\x12\x16\n\x0egrid_to_backup\x18\x12 \x01(\r\x12\x14\n\x0c\x62p_to_backup\x18\x13 \x01(\r\"$\n\tDevSwitch\x12\x17\n\x0f\x61\x63_socket_onoff\x18\x01 \x01(\x08\"P\n\x0b\x42pSocConfig\x12\x1e\n\x16\x63harge_soc_upper_limit\x18\x01 \x01(\r\x12!\n\x19\x64ischarge_soc_lower_limit\x18\x02 \x01(\r\"?\n\x0e\x42pBackupConfig\x12\x19\n\x11\x62\x61\x63kup_soc_on_off\x18\x01 \x01(\x08\x12\x12\n\nbackup_soc\x18\x02 \x01(\r\"I\n\x11\x42\x61tteryInfoReport\x12\x34\n\x11\x62\x61ttery_info_item\x18\x01 \x03(\x0b\x32\x19.es22_bkw.BatteryInfoItem\"5\n\x0f\x42\x61tteryInfoItem\x12\x0b\n\x03soc\x18\x01 \x01(\r\x12\x15\n\rcell_max_temp\x18\x0c \x01(\r\"Q\n\x14SysBatteryInfoReport\x12\x1d\n\x15\x64ischarge_remain_time\x18\x06 \x01(\r\x12\x1a\n\x12\x63harge_remain_time\x18\x07 \x01(\r\"]\n\x1cSystemSubDevEnergyFlowDetail\x12=\n\x16\x64\x65v_energy_flow_detail\x18\x01 \x03(\x0b\x32\x1d.es22_bkw.DevEnergyFlowDetail\"o\n\x13\x44\x65vEnergyFlowDetail\x12\x0e\n\x06\x64\x65v_sn\x18\x01 \x01(\t\x12\x0e\n\x06\x62p_pwr\x18\x04 \x01(\x02\x12\x0f\n\x07inv_pwr\x18\x06 \x01(\x02\x12\x13\n\x0bon_grid_pwr\x18\x07 \x01(\x02\x12\x12\n\nbackup_pwr\x18\x08 \x01(\x02\"c\n\x19SystemSubDevBatteryReport\x12\x46\n\x1bsystem_sub_dev_battery_info\x18\x01 \x03(\x0b\x32!.es22_bkw.SystemSubDevBatteryInfo\"2\n\x17SystemSubDevBatteryInfo\x12\n\n\x02sn\x18\x01 \x01(\t\x12\x0b\n\x03soc\x18\x02 \x01(\r\"\xd2\x01\n\x0bPropertyCmd\x12\x11\n\taction_id\x18\x01 \x01(\r\x12\'\n\ndev_switch\x18\x13 \x01(\x0b\x32\x13.es22_bkw.DevSwitch\x12%\n\twork_mode\x18\x19 \x01(\x0e\x32\x12.es22_bkw.WorkMode\x12,\n\rbp_soc_config\x18\x1d \x01(\x0b\x32\x15.es22_bkw.BpSocConfig\x12\x32\n\x10\x62p_backup_config\x18\x1e \x01(\x0b\x32\x18.es22_bkw.BpBackupConfig\"K\n\tActionCmd\x12\x11\n\taction_id\x18\x01 \x01(\r\x12+\n#active_display_property_full_upload\x18\x17 \x01(\x08*_\n\x08WorkMode\x12\x14\n\x10SELF_CONSUMPTION\x10\x00\x12\x0b\n\x07\x41I_MODE\x10\x01\x12\x0e\n\nTIMER_TASK\x10\x02\x12\x0c\n\x08POU_MODE\x10\x03\x12\x12\n\x0e\x45MERGENCY_STOP\x10\x04')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'es22_bkw_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
+  _globals['_WORKMODE']._serialized_start=1959
+  _globals['_WORKMODE']._serialized_end=2054
   _globals['_DISPLAYPROPERTYUPLOAD']._serialized_start=29
-  _globals['_DISPLAYPROPERTYUPLOAD']._serialized_end=607
-  _globals['_ENERGYSTREAMREPORT']._serialized_start=610
-  _globals['_ENERGYSTREAMREPORT']._serialized_end=755
-  _globals['_ENERGYFLOWFROMTODETAIL']._serialized_start=757
-  _globals['_ENERGYFLOWFROMTODETAIL']._serialized_end=869
-  _globals['_DEVSWITCH']._serialized_start=871
-  _globals['_DEVSWITCH']._serialized_end=907
-  _globals['_BPSOCCONFIG']._serialized_start=909
-  _globals['_BPSOCCONFIG']._serialized_end=989
-  _globals['_BPBACKUPCONFIG']._serialized_start=991
-  _globals['_BPBACKUPCONFIG']._serialized_end=1054
-  _globals['_BATTERYINFOREPORT']._serialized_start=1056
-  _globals['_BATTERYINFOREPORT']._serialized_end=1129
-  _globals['_BATTERYINFOITEM']._serialized_start=1131
-  _globals['_BATTERYINFOITEM']._serialized_end=1184
-  _globals['_SYSBATTERYINFOREPORT']._serialized_start=1186
-  _globals['_SYSBATTERYINFOREPORT']._serialized_end=1267
-  _globals['_SYSTEMSUBDEVENERGYFLOWDETAIL']._serialized_start=1269
-  _globals['_SYSTEMSUBDEVENERGYFLOWDETAIL']._serialized_end=1362
-  _globals['_DEVENERGYFLOWDETAIL']._serialized_start=1364
-  _globals['_DEVENERGYFLOWDETAIL']._serialized_end=1475
-  _globals['_SYSTEMSUBDEVBATTERYREPORT']._serialized_start=1477
-  _globals['_SYSTEMSUBDEVBATTERYREPORT']._serialized_end=1576
-  _globals['_SYSTEMSUBDEVBATTERYINFO']._serialized_start=1578
-  _globals['_SYSTEMSUBDEVBATTERYINFO']._serialized_end=1628
-  _globals['_PROPERTYCMD']._serialized_start=1631
-  _globals['_PROPERTYCMD']._serialized_end=1802
-  _globals['_ACTIONCMD']._serialized_start=1804
-  _globals['_ACTIONCMD']._serialized_end=1879
+  _globals['_DISPLAYPROPERTYUPLOAD']._serialized_end=646
+  _globals['_ENERGYSTREAMREPORT']._serialized_start=649
+  _globals['_ENERGYSTREAMREPORT']._serialized_end=794
+  _globals['_ENERGYFLOWFROMTODETAIL']._serialized_start=796
+  _globals['_ENERGYFLOWFROMTODETAIL']._serialized_end=908
+  _globals['_DEVSWITCH']._serialized_start=910
+  _globals['_DEVSWITCH']._serialized_end=946
+  _globals['_BPSOCCONFIG']._serialized_start=948
+  _globals['_BPSOCCONFIG']._serialized_end=1028
+  _globals['_BPBACKUPCONFIG']._serialized_start=1030
+  _globals['_BPBACKUPCONFIG']._serialized_end=1093
+  _globals['_BATTERYINFOREPORT']._serialized_start=1095
+  _globals['_BATTERYINFOREPORT']._serialized_end=1168
+  _globals['_BATTERYINFOITEM']._serialized_start=1170
+  _globals['_BATTERYINFOITEM']._serialized_end=1223
+  _globals['_SYSBATTERYINFOREPORT']._serialized_start=1225
+  _globals['_SYSBATTERYINFOREPORT']._serialized_end=1306
+  _globals['_SYSTEMSUBDEVENERGYFLOWDETAIL']._serialized_start=1308
+  _globals['_SYSTEMSUBDEVENERGYFLOWDETAIL']._serialized_end=1401
+  _globals['_DEVENERGYFLOWDETAIL']._serialized_start=1403
+  _globals['_DEVENERGYFLOWDETAIL']._serialized_end=1514
+  _globals['_SYSTEMSUBDEVBATTERYREPORT']._serialized_start=1516
+  _globals['_SYSTEMSUBDEVBATTERYREPORT']._serialized_end=1615
+  _globals['_SYSTEMSUBDEVBATTERYINFO']._serialized_start=1617
+  _globals['_SYSTEMSUBDEVBATTERYINFO']._serialized_end=1667
+  _globals['_PROPERTYCMD']._serialized_start=1670
+  _globals['_PROPERTYCMD']._serialized_end=1880
+  _globals['_ACTIONCMD']._serialized_start=1882
+  _globals['_ACTIONCMD']._serialized_end=1957
 # @@protoc_insertion_point(module_scope)

@@ -1080,6 +1080,14 @@
           "intelligent": "Intelligent Schedule"
         }
       },
+      "work_mode": {
+        "name": "Operating Mode",
+        "state": {
+          "self_powered": "Self-powered",
+          "intelligent": "Intelligent",
+          "scheduled": "Scheduled"
+        }
+      },
       "energy_strategy": {
         "name": "Energy Strategy",
         "state": {

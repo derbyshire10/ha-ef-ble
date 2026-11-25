@@ -17,11 +17,20 @@ from ..props import (
     proto_has_attr,
     repeated_pb_field_type,
 )
+from ..props.enums import IntFieldValue
 from ..props.transforms import out_power, pround
 from ..serial_routing import SerialRouting
 
 pb = proto_attr_mapper(es22_bkw_pb2.DisplayPropertyUpload)
 pb_flow = proto_attr_mapper(es22_bkw_pb2.DevEnergyFlowDetail)
+
+
+class OperatingMode(IntFieldValue):
+    UNKNOWN = -1
+
+    SELF_POWERED = 0
+    INTELLIGENT = 1
+    SCHEDULED = 2
 
 
 class BatteryPower(
@@ -106,6 +115,7 @@ class Device(DeviceBase, ProtobufProps):
     )
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
+    work_mode = pb_field(pb.work_mode, OperatingMode.from_value)
 
     battery_power = BatteryPower()
     grid_power = GridPower()
@@ -191,6 +201,9 @@ class Device(DeviceBase, ProtobufProps):
 
         message = es22_bkw_pb2.PropertyCmd(action_id=field.number)
         getattr(message, field.name).CopyFrom(config)
+        await self._send_property_cmd(message)
+
+    async def _send_property_cmd(self, message: es22_bkw_pb2.PropertyCmd) -> None:
         packet = self._routing.write_packet(message.SerializeToString())
         await self.send_packet(packet, raise_on_failure=True)
 
@@ -232,3 +245,18 @@ class Device(DeviceBase, ProtobufProps):
     @controls.outlet(ac_ports)
     async def enable_ac_ports(self, enabled: bool):
         await self._write_property(es22_bkw_pb2.DevSwitch(ac_socket_onoff=enabled))
+
+    @controls.select(work_mode, options=OperatingMode)
+    async def set_work_mode(self, mode: OperatingMode):
+        if mode is OperatingMode.UNKNOWN:
+            raise ValueError("Unknown STREAM AC 5000 operating mode")
+
+        work_mode_field = es22_bkw_pb2.PropertyCmd.DESCRIPTOR.fields_by_name[
+            "work_mode"
+        ]
+        await self._send_property_cmd(
+            es22_bkw_pb2.PropertyCmd(
+                action_id=work_mode_field.number,
+                work_mode=mode.value,
+            )
+        )

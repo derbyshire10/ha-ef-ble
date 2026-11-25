@@ -375,6 +375,14 @@
       "operating_mode_select": {
         "default": "mdi:state-machine"
       },
+      "work_mode": {
+        "default": "mdi:state-machine",
+        "state": {
+          "self_powered": "mdi:solar-power",
+          "intelligent": "mdi:head-lightbulb",
+          "scheduled": "mdi:calendar-clock"
+        }
+      },
       "energy_strategy": {
         "default": "mdi:state-machine",
         "state": {

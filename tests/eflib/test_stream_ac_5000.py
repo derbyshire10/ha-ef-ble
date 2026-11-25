@@ -2,7 +2,8 @@ import pytest
 from pytest_mock import MockerFixture
 
 from custom_components.ef_ble.eflib import device_class_from_sn
-from custom_components.ef_ble.eflib.devices.stream_ac_5000 import Device
+from custom_components.ef_ble.eflib.devices.stream_ac_5000 import Device, OperatingMode
+from custom_components.ef_ble.eflib.entity import controls
 from custom_components.ef_ble.eflib.packet import Packet, PacketV4
 from custom_components.ef_ble.eflib.pb import es22_bkw_pb2
 from custom_components.ef_ble.eflib.serial_routing import RoutingEnvelope, SerialRouting
@@ -66,6 +67,28 @@ async def test_parses_stream_ac_5000_telemetry(device):
     assert device.load_from_grid == 10
     assert device.remaining_time_charging == 17
     assert device.remaining_time_discharging == 83
+
+
+@pytest.mark.parametrize(
+    ("wire_mode", "expected_mode"),
+    [
+        (0, OperatingMode.SELF_POWERED),
+        (1, OperatingMode.INTELLIGENT),
+        (2, OperatingMode.SCHEDULED),
+    ],
+)
+async def test_parses_operating_mode(device, wire_mode, expected_mode):
+    message = es22_bkw_pb2.DisplayPropertyUpload(work_mode=wire_mode)
+    packet = await device.packet_parse(_telemetry_packet(message))
+
+    assert await device.data_parse(packet)
+    assert device.work_mode is expected_mode
+
+
+def test_exposes_supported_work_modes_as_a_select(device):
+    (control,) = device.get_controls(controls.select)
+
+    assert control.options_str == ["self_powered", "intelligent", "scheduled"]
 
 
 async def test_parses_unobfuscated_serial_routed_v4_telemetry(device):

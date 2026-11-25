@@ -2,12 +2,21 @@ syntax = "proto2";
 
 package es22_bkw;
 
+enum WorkMode {
+  SELF_CONSUMPTION = 0;
+  AI_MODE = 1;
+  TIMER_TASK = 2;
+  POU_MODE = 3;
+  EMERGENCY_STOP = 4;
+}
+
 // STREAM AC 5000 BLE properties. Field numbers are retained from captured ES22
 // telemetry and app configuration messages.
 message DisplayPropertyUpload {
   optional EnergyStreamReport sys_energy_stream_report = 11;
   optional EnergyFlowFromToDetail energy_flow_from_to_detail = 12;
   optional DevSwitch dev_switch = 19;
+  optional WorkMode work_mode = 25;
   optional BpSocConfig bp_soc_config = 29;
   optional BpBackupConfig bp_backup_config = 30;
   optional BatteryInfoReport battery_info_report = 38;
@@ -85,6 +94,7 @@ message SystemSubDevBatteryInfo {
 message PropertyCmd {
   optional uint32 action_id = 1;
   optional DevSwitch dev_switch = 19;
+  optional WorkMode work_mode = 25;
   optional BpSocConfig bp_soc_config = 29;
   optional BpBackupConfig bp_backup_config = 30;
 }
