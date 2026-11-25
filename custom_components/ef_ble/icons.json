@@ -265,6 +265,9 @@
           "off": "mdi:battery-sync-outline"
         }
       },
+      "feed_in_limit": {
+        "default": "mdi:transmission-tower"
+      },
       "ac_ports": {
         "default": "mdi:power-plug",
         "state": {

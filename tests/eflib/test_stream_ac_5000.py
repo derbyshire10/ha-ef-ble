@@ -93,8 +93,9 @@ def test_exposes_supported_work_modes_as_a_select(device):
 
 async def test_parses_grid_feed_power_max_and_registers_export_button(device):
     message = es22_bkw_pb2.DisplayPropertyUpload(
-        bkw_power_parameter_config=es22_bkw_pb2.BkwPowerParameterConfig(
-            on_grid_feed_power_max=2500
+        power_parameter_config=es22_bkw_pb2.BkwPowerParameterConfig(
+            on_grid_feed_power_max=2500,
+            feed_to_grid_limit_on_off=False,
         )
     )
     packet = await device.packet_parse(_telemetry_packet(message))
@@ -103,6 +104,11 @@ async def test_parses_grid_feed_power_max_and_registers_export_button(device):
     (control,) = device.get_controls(controls.button)
     assert control.key == "set_max_grid_export_limit"
     assert device.grid_feed_power_max == 2500
+    assert any(
+        control.key == "feed_in_limit"
+        for control in device.get_controls(controls.switch)
+    )
+    assert device.feed_in_limit is False
 
 
 async def test_max_grid_export_button_requires_reported_limit(device):

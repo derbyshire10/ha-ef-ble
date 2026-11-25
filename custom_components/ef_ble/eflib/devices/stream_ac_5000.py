@@ -116,7 +116,7 @@ class Device(DeviceBase, ProtobufProps):
     load_from_battery = pb_field(pb.energy_flow_from_to_detail.bp_to_load)
     load_from_grid = pb_field(pb.energy_flow_from_to_detail.grid_to_load)
     work_mode = pb_field(pb.work_mode, OperatingMode.from_value)
-    grid_feed_power_max = pb_field(pb.bkw_power_parameter_config.on_grid_feed_power_max)
+    grid_feed_power_max = pb_field(pb.power_parameter_config.on_grid_feed_power_max)
 
     battery_power = BatteryPower()
     grid_power = GridPower()
@@ -125,6 +125,7 @@ class Device(DeviceBase, ProtobufProps):
     battery_charge_limit_max = pb_field(pb.bp_soc_config.charge_soc_upper_limit)
     energy_backup = pb_field(pb.bp_backup_config.backup_soc_on_off)
     energy_backup_battery_level = pb_field(pb.bp_backup_config.backup_soc)
+    feed_in_limit = pb_field(pb.power_parameter_config.feed_to_grid_limit_on_off)
     ac_ports = pb_field(pb.dev_switch.ac_socket_onoff)
 
     def __init__(
@@ -243,6 +244,12 @@ class Device(DeviceBase, ProtobufProps):
             es22_bkw_pb2.BpBackupConfig(backup_soc_on_off=enabled)
         )
 
+    @controls.switch(feed_in_limit)
+    async def enable_feed_in_limit(self, enabled: bool):
+        await self._write_property(
+            es22_bkw_pb2.BkwPowerParameterConfig(feed_to_grid_limit_on_off=enabled)
+        )
+
     @controls.outlet(ac_ports)
     async def enable_ac_ports(self, enabled: bool):
         await self._write_property(es22_bkw_pb2.DevSwitch(ac_socket_onoff=enabled))
@@ -271,5 +278,8 @@ class Device(DeviceBase, ProtobufProps):
             )
 
         await self._write_property(
-            es22_bkw_pb2.BkwPowerParameterConfig(on_grid_feed_power_limit=maximum)
+            es22_bkw_pb2.BkwPowerParameterConfig(
+                on_grid_feed_power_limit=maximum,
+                feed_to_grid_limit_on_off=True,
+            )
         )

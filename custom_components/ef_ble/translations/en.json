@@ -343,7 +343,7 @@
         "name": "Power Off"
       },
       "set_max_grid_export_limit": {
-        "name": "Set Maximum Grid Export Limit"
+        "name": "Enable Maximum Grid Export"
       },
       "unpause_solar": {
         "name": "Unpause Solar"
@@ -1236,6 +1236,9 @@
       },
       "energy_backup": {
         "name": "Backup Reserve"
+      },
+      "feed_in_limit": {
+        "name": "Feed-in Limit"
       },
       "usb_ports": {
         "name": "USB Ports"
