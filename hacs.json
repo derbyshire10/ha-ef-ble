@@ -1,5 +1,5 @@
 {
-  "name": "EcoFlow BLE",
+  "name": "EcoFlow BLE Test",
   "render_readme": true,
   "homeassistant": "2024.7.0"
 }
