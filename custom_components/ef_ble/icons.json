@@ -158,6 +158,9 @@
       "load_from_battery": {
         "default": "mdi:battery-arrow-up"
       },
+      "usable_battery_energy": {
+        "default": "mdi:battery"
+      },
       "load_from_grid": {
         "default": "mdi:transmission-tower"
       },

@@ -821,6 +821,7 @@ _SENSORS: Final[dict[str, SensorEntityDescription]] = {
     "load_from_battery": power(),
     "load_from_grid": power(),
     "load_from_pv": power(),
+    "usable_battery_energy": energy_storage(),
     "ac_power_{n}": port_power("AC ({n})", indexed_range=range(3)),
     "ac_power_1_1": port_power("AC (1-1)"),
     "ac_power_1_2": port_power("AC (1-2)"),

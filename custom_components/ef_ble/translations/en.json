@@ -799,6 +799,9 @@
       "load_from_battery": {
         "name": "Load From Battery"
       },
+      "usable_battery_energy": {
+        "name": "Usable Battery Energy"
+      },
       "load_from_grid": {
         "name": "Load From Grid"
       },
