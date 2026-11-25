@@ -186,6 +186,9 @@ class EcoflowSelect(EcoflowEntity, SelectEntity):
     async def async_select_option(self, option: str) -> None:
         if self._set_state is not None:
             await self._set_state(self._device, option)
+            self._attr_current_option = option
+            self._attr_options = self._options_now()
+            self.async_write_ha_state()
             return
 
         await super().async_select_option(option)
